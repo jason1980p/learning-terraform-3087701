@@ -24,6 +24,7 @@ module "blog_vpc" {
   azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
 
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  
   tags = {
     Terraform = "true"
     Environment = "dev"
@@ -32,7 +33,7 @@ module "blog_vpc" {
 
 
 # EC2 module
-resource "aws_instance" "web" {
+resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
@@ -48,12 +49,11 @@ resource "aws_instance" "web" {
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
-  name    = "blog"
-  vpc_id  = module.blog_vpc.vpc_id
 
+  vpc_id  = module.blog_vpc.vpc_id
+  name    = "blog"
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
-
   egress_rules       = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
 }
