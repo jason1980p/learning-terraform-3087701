@@ -13,11 +13,8 @@ data "aws_ami" "app_ami" {
 
   owners = ["979382823631"] # Bitnami
 }
-# default VPC
-data "aws_vpc" "default" {
-  default = true
-}
-# New VPC module
+
+# VPC module
 module "blog_vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
